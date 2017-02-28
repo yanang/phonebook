@@ -4,9 +4,8 @@
 
 #include "phonebook_opt_hash.h"
 
-/* FILL YOUR OWN IMPLEMENTATION HERE! */
+/* hash function chaining with link list*/
 
-//hash * hashTable =(struct hash *) calloc(256,sizeof(struct hash));
 unsigned int BKDRHash(char *stri)
 {
     unsigned int seed = 131;
@@ -15,7 +14,7 @@ unsigned int BKDRHash(char *stri)
     while(*stri) {
         hash = hash * seed + (*stri++);
     }
-    return( (hash & 0x7FFFFFFF) % 1024);
+    return ((hash & 0x7FFFFFFF) % 1024);
 }
 
 
@@ -26,31 +25,30 @@ entry *findName(char lastName[], entry *e[])
     while(pGoal != NULL) {
         if(strcasecmp(pGoal->lastName,lastName)==0)
             return  pGoal;
-        pGoal = e[hash] -> pNext;
+        pGoal = e[hash]->pNext;
     }
     return NULL;
 }
 
-void *append(char lastName[], entry *e[])
+void append(char lastName[], entry *e[])
 {
     unsigned int hash = BKDRHash(lastName);
 
-    if(!e[hash]) {
+    if (!e[hash]) {
         e[hash] = (entry *) malloc (sizeof(entry));
-        e[hash] -> pNext = NULL;
+        e[hash]->pNext = NULL;
         strcpy(e[hash]->lastName,lastName);
     } else {
         entry *pHead = (entry *) malloc (sizeof(entry));
-        pHead -> pNext = e[hash];
+        pHead->pNext = e[hash];
         e[hash] = pHead;
         strcpy(pHead->lastName,lastName);
         /*        entry *pLast = (entry *) malloc (sizeof(entry));
                   pLast -> pNext = NULL ;
                   strcpy(pLast->lastName,lastName);
                   e[hash] -> pNext = pLast;
-                  //not finished
-                  //should add loop to find the last data
+                  * not finished
+                  * should add loop to find the last data
         */
     }
-    return NULL;
 }
